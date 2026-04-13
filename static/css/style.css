@@ -1,0 +1,156 @@
+/* Modern Reset and Fonts */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    /* Soft light blue background */
+    background-color: #f0f4f8;
+    color: #2c3e50;
+    line-height: 1.6;
+}
+
+/* Navbar Styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0b3c5d; /* Deep marine blue */
+    color: white;
+    padding: 15px 50px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.navbar .logo {
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    color: #d9e8f5;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s, transform 0.2s;
+}
+
+.nav-links a:hover {
+    color: #328cc1; /* Bright ocean blue on hover */
+    transform: translateY(-2px);
+}
+
+/* Form Containers (Cards) */
+.login-container, .ticket-container {
+    background: white;
+    max-width: 450px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    border-top: 5px solid #328cc1;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #0b3c5d;
+}
+
+/* Inputs */
+.input-group, label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #34495e;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #328cc1;
+    outline: none;
+}
+
+/* Buttons */
+button, .login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #328cc1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
+}
+
+button:hover, .login-btn:hover {
+    background-color: #1d6fa5;
+    box-shadow: 0 4px 12px rgba(50, 140, 193, 0.3);
+}
+
+/* Hero Section (Home page) */
+.home {
+    max-width: 800px;
+    margin: 80px auto;
+    text-align: center;
+    background: white;
+    padding: 60px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.home h1 {
+    font-size: 3em;
+    color: #0b3c5d;
+    margin-bottom: 15px;
+}
+
+.home p {
+    font-size: 1.2em;
+    color: #7f8c8d;
+}
+/* Center the content vertically and horizontally */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px); /* Takes up full screen minus navbar */
+    padding: 20px;
+}
+
+/* Ensure the container doesn't stretch too wide */
+.ticket-container, .login-container {
+    background: #1e293b; /* Adjusted to match your dark theme */
+    color: #e2e8f0;
+    max-width: 450px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    border-top: 5px solid #328cc1;
+    margin: auto; /* Centers it if Flexbox fails */
+}

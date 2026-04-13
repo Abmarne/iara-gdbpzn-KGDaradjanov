@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register - IARA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">IARA</div>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+
+        {% if session.get('username') %}
+            <li><a href="{{ url_for('logout') }}">Logout ({{ session['username'] }})</a></li>
+        {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% endif %}
+
+        <li><a href="{{ url_for('ticket') }}">Fishing Ticket</a></li>
+    </ul>
+</nav>
+
+<main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="color: red; text-align: center; margin-bottom: 20px;">
+          {% for message in messages %}
+            <p><b>{{ message }}</b></p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+        <div class="login-container" style="margin: 20px 0;">
+            <h2>Login</h2>
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="input-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" name="username" placeholder="Enter username" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+        </div>
+
+        <div class="login-container" style="margin: 20px 0;">
+            <h2>Register</h2>
+            <form action="{{ url_for('register') }}" method="POST">
+                <div class="input-group">
+                    <label for="reg-username">Choose a Username</label>
+                    <input type="text" id="reg-username" name="username" placeholder="New username" required>
+                </div>
+                <div class="input-group">
+                    <label for="reg-password">Choose a Password</label>
+                    <input type="password" id="reg-password" name="password" placeholder="New password" required>
+                </div>
+                <button type="submit" class="login-btn" style="background-color: #3498db;">Create Account</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
