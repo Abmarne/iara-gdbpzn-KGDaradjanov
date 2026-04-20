@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspector Dashboard - IARA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .inspector-container {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        .verify-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .verify-form {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .verify-form input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .verify-form button {
+            padding: 12px 30px;
+            background: #328cc1;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .verify-form button:hover {
+            background: #1d6fa5;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .result-valid {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        .result-invalid {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .info-item {
+            padding: 10px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 5px;
+        }
+        .info-item strong {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .info-item span {
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">IARA</div>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('dashboard') }}">My Tickets</a></li>
+        <li><a href="{{ url_for('vessels') }}">Vessel Registry</a></li>
+        <li><a href="{{ url_for('inspector_dashboard') }}">Inspections</a></li>
+        {% if session.get('user_role') == 'admin' %}
+            <li><a href="{{ url_for('admin_dashboard') }}">Admin Panel</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('logout') }}">Logout ({{ session['username'] }} - {{ session['user_role']|title }})</a></li>
+    </ul>
+</nav>
+
+<main style="flex-direction: column; padding-top: 50px;">
+    <h2>Inspector Dashboard</h2>
+    <p>Validate fishing permits and vessel registrations</p>
+    
+    <div class="inspector-container">
+        <div class="verify-section">
+            <h3>Verify Fishing Permit</h3>
+            <p style="color: #666; margin-top: 10px;">Enter a permit ID to verify its authenticity</p>
+            
+            <form id="verifyForm" class="verify-form">
+                <input type="text" id="permitId" name="permit_id" placeholder="Enter Permit ID (e.g., IARA-XXXX)" required>
+                <button type="submit">Verify Permit</button>
+            </form>
+            
+            <div id="resultBox" class="result-box"></div>
+        </div>
+        
+        <div class="verify-section">
+            <h3>Quick Actions</h3>
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <a href="{{ url_for('vessels') }}" style="padding: 12px 24px; background: #328cc1; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">View All Vessels</a>
+                <a href="{{ url_for('admin_all_tickets') }}" style="padding: 12px 24px; background: #0b3c5d; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">View All Tickets</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const permitId = document.getElementById('permitId').value;
+    const resultBox = document.getElementById('resultBox');
+    
+    // Show loading state
+    resultBox.style.display = 'block';
+    resultBox.className = 'result-box';
+    resultBox.innerHTML = '<p style="text-align: center;"><strong>Verifying...</strong></p>';
+    
+    try {
+        const formData = new FormData();
+        formData.append('permit_id', permitId);
+        
+        const response = await fetch('{{ url_for("inspector_verify_ticket") }}', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'valid') {
+            resultBox.className = 'result-box result-valid';
+            resultBox.innerHTML = `
+                <h4 style="margin-bottom: 15px;">✓ Valid Permit</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Permit ID</strong>
+                        <span>${result.permit_id}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Owner</strong>
+                        <span>${result.owner}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Purchase Date</strong>
+                        <span>${result.purchase_date}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Price Paid</strong>
+                        <span>${result.price} €</span>
+                    </div>
+                </div>
+            `;
+        } else {
+            resultBox.className = 'result-box result-invalid';
+            resultBox.innerHTML = `
+                <h4 style="margin-bottom: 10px;">✗ Invalid Permit</h4>
+                <p>${result.message}</p>
+            `;
+        }
+    } catch (error) {
+        resultBox.className = 'result-box result-invalid';
+        resultBox.innerHTML = '<h4 style="margin-bottom: 10px;">✗ Error</h4><p>Failed to verify permit. Please try again.</p>';
+    }
+});
+</script>
+
+</body>
+</html>

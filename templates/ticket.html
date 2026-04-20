@@ -43,7 +43,9 @@
     <ul class="nav-links">
         <li><a href="{{ url_for('index') }}">Home</a></li>
         {% if session.get('username') %}
-            <li><a href="{{ url_for('logout') }}">Logout ({{ session['username'] }})</a></li>
+            <li><a href="{{ url_for('dashboard') }}">My Tickets</a></li>
+            <li><a href="{{ url_for('vessels') }}">Vessel Registry</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout ({{ session['username'] }} - {{ session.get('user_role', 'User')|title }})</a></li>
         {% else %}
             <li><a href="{{ url_for('login') }}">Login</a></li>
         {% endif %}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - IARA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .admin-container {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+        .admin-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .admin-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .admin-table th, .admin-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .admin-table th {
+            background: #0b3c5d;
+            color: white;
+        }
+        .admin-table tr:hover {
+            background: #f5f5f5;
+        }
+        .role-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .role-admin {
+            background: #e74c3c;
+            color: white;
+        }
+        .role-inspector {
+            background: #f39c12;
+            color: white;
+        }
+        .role-fisherman {
+            background: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">IARA</div>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('dashboard') }}">My Tickets</a></li>
+        <li><a href="{{ url_for('vessels') }}">Vessel Registry</a></li>
+        <li><a href="{{ url_for('inspector_dashboard') }}">Inspections</a></li>
+        <li><a href="{{ url_for('admin_dashboard') }}">Admin Panel</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout ({{ session['username'] }} - {{ session['user_role']|title }})</a></li>
+    </ul>
+</nav>
+
+<main style="flex-direction: column; padding-top: 50px;">
+    <h2>User Management</h2>
+    <p>Manage all registered users</p>
+    
+    <div class="admin-container">
+        <div class="admin-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Tickets</th>
+                        <th>Vessels</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td><strong>{{ user.username }}</strong></td>
+                        <td>
+                            <span class="role-badge role-{{ user.role }}">{{ user.role }}</span>
+                        </td>
+                        <td>{{ user.tickets|length }}</td>
+                        <td>{{ user.vessels|length if user.vessels else 0 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('admin_dashboard') }}" style="padding: 12px 24px; background: #328cc1; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">← Back to Admin Dashboard</a>
+    </div>
+</main>
+
+</body>
+</html>

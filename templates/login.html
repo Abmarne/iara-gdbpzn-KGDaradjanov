@@ -14,7 +14,7 @@
         <li><a href="{{ url_for('index') }}">Home</a></li>
 
         {% if session.get('username') %}
-            <li><a href="{{ url_for('logout') }}">Logout ({{ session['username'] }})</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout ({{ session['username'] }} - {{ session.get('user_role', 'User')|title }})</a></li>
         {% else %}
             <li><a href="{{ url_for('login') }}">Login</a></li>
         {% endif %}
@@ -60,6 +60,14 @@
                 <div class="input-group">
                     <label for="reg-password">Choose a Password</label>
                     <input type="password" id="reg-password" name="password" placeholder="New password" required>
+                </div>
+                <div class="input-group">
+                    <label for="reg-role">Select Role</label>
+                    <select id="reg-role" name="role" required>
+                        <option value="fisherman">Fisherman</option>
+                        <option value="inspector">Inspector</option>
+                        <option value="admin">Admin</option>
+                    </select>
                 </div>
                 <button type="submit" class="login-btn" style="background-color: #3498db;">Create Account</button>
             </form>

@@ -32,7 +32,8 @@
         <li><a href="{{ url_for('index') }}">Home</a></li>
         <li><a href="{{ url_for('dashboard') }}">My Dashboard</a></li>
         <li><a href="{{ url_for('ticket') }}">Buy Ticket</a></li>
-        <li><a href="{{ url_for('logout') }}">Logout ({{ session['username'] }})</a></li>
+        <li><a href="{{ url_for('vessels') }}">Vessel Registry</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout ({{ session['username'] }} - {{ session['user_role']|title }})</a></li>
     </ul>
 </nav>
 
